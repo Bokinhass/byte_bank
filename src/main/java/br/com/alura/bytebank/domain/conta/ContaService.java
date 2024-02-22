@@ -17,6 +17,11 @@ public class ContaService {
     this.connection = new ConnectionFactory();
   }
 
+  private void alterar(Conta conta, BigDecimal valor) {
+    Connection conn = connection.recuperarConexao();
+    new ContaDAO(conn).alterar(conta.getNumero(), valor);
+  }
+
   public Set<Conta> listarContasAbertas() {
     Connection conn = connection.recuperarConexao();
     return new ContaDAO(conn).listar();
@@ -43,7 +48,8 @@ public class ContaService {
       throw new RegraDeNegocioException("Saldo insuficiente!");
     }
 
-    conta.sacar(valor);
+    BigDecimal novoValor = conta.getSaldo().subtract(valor);
+    alterar(conta, novoValor);
   }
 
   public void realizarDeposito(Integer numeroDaConta, BigDecimal valor) {
@@ -52,7 +58,14 @@ public class ContaService {
       throw new RegraDeNegocioException("Valor do deposito deve ser superior a zero!");
     }
 
-    conta.depositar(valor);
+    BigDecimal novoValor = conta.getSaldo().add(valor);
+    alterar(conta, novoValor);
+  }
+
+  public void realizarTransferencia(Integer numeroDaContaOrigem, Integer numeroDaContaDestino, BigDecimal valor) {
+    this.realizarSaque(numeroDaContaOrigem, valor);
+    this.realizarDeposito(numeroDaContaDestino, valor);
+
   }
 
   public void encerrar(Integer numeroDaConta) {
