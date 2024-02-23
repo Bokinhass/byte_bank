@@ -14,7 +14,7 @@ public class BytebankApplication {
 
   public static void main(String[] args) {
     var opcao = exibirMenu();
-    while (opcao != 9) {
+    while (opcao != 0) {
       try {
         switch (opcao) {
           case 1:
@@ -41,6 +41,9 @@ public class BytebankApplication {
           case 8:
             realizarTransferencia();
             break;
+          case 9:
+            desativaConta();
+            break;
         }
       } catch (RegraDeNegocioException e) {
         System.out.println("Erro: " + e.getMessage());
@@ -64,7 +67,8 @@ public class BytebankApplication {
         6 - Realizar depósito em uma conta
         7 - Buscar conta por número
         8 - Realizar transferencia
-        9 -  Sair
+        9 - Desativar conta
+        0 -  Sair
         """);
     return teclado.nextInt();
   }
@@ -171,6 +175,17 @@ public class BytebankApplication {
 
     System.out.println(conta);
 
+    System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
+    teclado.next();
+  }
+
+  private static void desativaConta() {
+    System.out.println("Digite o número da conta:");
+    var numeroDaConta = teclado.nextInt();
+
+    service.desativarConta(numeroDaConta);
+
+    System.out.println("Conta encerrada com sucesso!");
     System.out.println("Pressione qualquer tecla e de ENTER para voltar ao menu principal");
     teclado.next();
   }
