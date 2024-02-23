@@ -24,7 +24,7 @@ public class ContaDAO {
     var conta = new Conta(dadosDaConta.numero(), BigDecimal.ZERO, cliente, true);
 
     String sql = "INSERT INTO conta (numero, saldo, cliente_nome, cliente_cpf, cliente_email)" +
-        "VALUE (?, ?, ?, ?, ?)";
+        "VALUE (?, ?, ?, ?, ?, ?)";
 
     try {
       PreparedStatement preparedStatement = conn.prepareStatement(sql);
